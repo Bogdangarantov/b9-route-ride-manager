@@ -1,4 +1,9 @@
 
+BEGIN;
+
+CREATE TYPE user_role as ENUM ('MODERATOR','ADMIN','USER');
+
+CREATE CAST (varchar AS user_role) WITH INOUT AS IMPLICIT;
 
 CREATE TABLE IF NOT EXISTS public.cities
 (
@@ -117,3 +122,5 @@ ALTER TABLE IF EXISTS public.routes_cities
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID;
+
+END;
