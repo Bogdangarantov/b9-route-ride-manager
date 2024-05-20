@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS public.tickets
     ticket_status character varying NOT NULL,
     seat_number character varying NOT NULL,
     date_of_selling timestamp without time zone NOT NULL,
-    pricer double precision NOT NULL,
+    price double precision NOT NULL,
     PRIMARY KEY (id)
 );
 
