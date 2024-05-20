@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <link rel="stylesheet" href="/css/management.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=K2D' rel='stylesheet'>
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="/css/loading.css">
+</head>
+<body>
+<input id="user" th:value="${user}" style="display:none">
+<div id="app">
+    <div class="loading" id="loading" v-if="loading===true">
+        <div class="lds-ellipsis">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div class="body" v-if="loading===false">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a href="/" class="navbar-brand" style="font-weight: bold">B9 | RRS</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                        aria-controls="navbarContect" aria-expanded="false">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav ms-auto mr-2 justify-content-end">
+                        <li class="nav-item">
+                            <a href="/my-tickets" class="nav-link header-text-custom">My Tickets</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" v-if="user.roles.includes('MODERATOR')" class="nav-link header-text-custom">Management</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link header-text-custom" v-on:click="logout">Logout</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col create-user-container">
+                    <div class="create-user-content">
+                        <div class="create-user-title">
+                            <h1>Create User</h1>
+                        </div>
+                        <div class="create-user-body">
+                            <form>
+                                <div class="mb-3">
+                                    <input class="new-user-input" placeholder="Name" v-model="newUser.name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <input class="new-user-input" placeholder="Login" v-model="newUser.login" required>
+                                </div>
+                                <div class="mb-3">
+                                    <input class="new-user-input" placeholder="Password" v-model="newUser.password"
+                                           required>
+                                </div>
+                                <div class="mb-3">
+                                    <select name="roles-select" class="roles-select" id="roles-select"
+                                            v-model="newUser.roles" multiple required>
+                                        <option value="USER">USER</option>
+                                        <option value="MANAGER">MANAGER</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <button class="create-user-button" v-on:click="addUser" type="submit">Create
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col create-user-container">
+                    <div class="create-user-content">
+                        <div class="create-user-title">
+                            <h1>Create City</h1>
+                        </div>
+                        <div class="create-user-body">
+                            <form>
+                                <div class="mb-3">
+                                    <input class="new-user-input" placeholder="City Name" v-model="newCity.name"
+                                           required>
+                                </div>
+                                <div class="mb-3">
+                                    <button class="create-user-button" v-on:click="addCity" type="submit">Create City
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col routes-creator">
+                    <form class="route-form">
+                        <div class="departure-city-div">
+                            <label for="departure">Departure City</label>
+                            <select name="departure" id="departure" v-model="depCity">
+                                <option v-for="(city,index) in allCities" :key="index" :value="city">{{city.cityName}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="transit-city-div">
+                            <label for="trans-city-select"> Transitional City</label>
+                            <select id="trans-city-select" v-for="(transCity,index) in transitCity" v-model="transitCity[index]" :key="index">
+                                <option v-for="(city,index) in allCities" :key="index" :value="city">{{city.cityName}}
+                                </option>
+                            </select>
+
+                            <i class="fa-solid plus-icon fa-plus" v-on:click="addTransitCity"></i>
+                        </div>
+                        <div class="arrival-city-div">
+                            <label for="arrival">Arrival City</label>
+                            <select name="arrival" id="arrival" v-model="arrivalCity">
+                                <option v-for="(city,index) in allCities" :key="index" :value="city">{{city.cityName}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="user-ticket-price ticket-input">
+                            <input type="number" v-model="userTicketPrice" placeholder="User ticket price">
+                        </div>
+                        <div class="user-ticket-price ticket-input">
+                            <input type="number" v-model="baggageTicketPrice" placeholder="Baggage ticket price">
+                        </div>
+<!--                        type="datetime-local"-->
+                        <div class="user-ticket-price ticket-input">
+                            <label for="dep-time">Departure Time</label>
+                                <input id="dep-time" v-model="depTime" type="datetime-local" >
+                        </div>
+                        <div class="user-ticket-price ticket-input">
+                            <label for="arr-time">Arrival Time</label>
+                            <input id="arr-time" v-model="arrivalTime" type="datetime-local">
+                        </div>
+                        <div class="create-route-div">
+                            <button class="create-route-btn" v-on:click="createRoute">
+                                Create Route
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/management.js" type="module"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"
+        integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+
+</body>
+</html>
