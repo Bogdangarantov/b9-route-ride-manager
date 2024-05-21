@@ -30,17 +30,5 @@
 
 ---
 ## Features
-
-- [FastAPI](https://www.java.com/en/) (Java 17)
-  - JWT authentication
-  - Core of the APP
-- [React](https://reactjs.org/) (with Typescript)
-  - [react-router v6](https://reactrouter.com/docs/en/v6/getting-started/overview/) to handle routing
-  - [react-hooks](https://reactjs.org/docs/hooks-intro.html)
-  - [axios](https://github.com/axios/axios) to send requests
-- [SqlAlchemy](https://www.sqlalchemy.org/) for ORM
-- [Pytest](https://docs.pytest.org/en/latest/) for backend tests
-- [Black](https://github.com/psf/black) (Python)
-
----
+--- 
 ## Features
