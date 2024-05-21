@@ -29,6 +29,7 @@ public class RouteService {
         Route route = mapToRoute(routeTO);
         return routesRepository.saveAndFlush(route);
     }
+
     private Route mapToRoute(RouteTO routeTO){
         Route route = Route
                 .builder()
@@ -103,8 +104,6 @@ public class RouteService {
                 }
             }
         }
-
-
         return false;
     }
 
