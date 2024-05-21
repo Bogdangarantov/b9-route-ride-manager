@@ -17,4 +17,5 @@ public record RouteTO(@JsonProperty("departureCity") City departureCity,
                       @JsonProperty("baggageTicketPrice") Double baggageTicketPrice
 
                       ) {
+
 }

@@ -1,7 +1,6 @@
 package org.example.b9routeridemanager.repositories;
 
 import org.example.b9routeridemanager.entities.City;
-import org.example.b9routeridemanager.entities.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

@@ -4,13 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.b9routeridemanager.dto.TicketTO;
 import org.example.b9routeridemanager.entities.Route;
 import org.example.b9routeridemanager.entities.Ticket;
-import org.example.b9routeridemanager.enums.TicketStatus;
 import org.example.b9routeridemanager.repositories.RoutesRepository;
 import org.example.b9routeridemanager.repositories.TicketRepository;
 import org.example.b9routeridemanager.repositories.UsersRepository;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.util.Set;
 
 @Service
